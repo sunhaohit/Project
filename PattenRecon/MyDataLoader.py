@@ -61,7 +61,7 @@ class MyDataset(Dataset):
                 data = f.readlines()[10:]
                 data = [np.array(i.split(' '), dtype=np.float32) for i in data]
                 data = torch.tensor(data)
-                # data = farthest_point_sample(data, 1024)
+                # data = farthest_point_sample(data, 1024) #这里没必要采样1024个点，在PointNet的Encoder中会进行采样
                 ls_pc.append(data)
 
         ls_ve = [pickle.load(open(os.path.join(VE_path, i), 'rb')) for i in ls_ve_fn]
@@ -83,7 +83,7 @@ class MyDataset(Dataset):
         if self.split == 'train':
             return self.pc_train[index], self.ve_train[index]
         else:
-            return self.ve_test[index], self.ve_test[index]
+            return self.pc_test[index], self.ve_test[index]
 
     def __getitem__(self, index):
         return self._get_item(index)

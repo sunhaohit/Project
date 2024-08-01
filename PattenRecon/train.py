@@ -173,7 +173,7 @@ def main(args):
             points[:, :, 0:3] = provider.random_scale_point_cloud(points[:, :, 0:3])
             points[:, :, 0:3] = provider.shift_point_cloud(points[:, :, 0:3])
             points = torch.Tensor(points)
-            points = points.transpose(2, 1)  # shape(12, 6, N)?
+            points = points.transpose(2, 1)  # shape(B, 6, N)?
 
             if not args.use_cpu:
                 points, target = points.cuda(), target.cuda()
