@@ -157,8 +157,9 @@ def main(args):
 
     '''TRANING'''
     logger.info('Start training...')
-    total_loss = 0
+
     for epoch in range(start_epoch, args.epoch):
+        total_loss = 0
         log_string('Epoch %d (%d/%s):' % (global_epoch + 1, epoch + 1, args.epoch))
         classifier = classifier.train()
 
