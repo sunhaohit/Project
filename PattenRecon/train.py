@@ -39,7 +39,7 @@ def parse_args():
     parser.add_argument('--optimizer', type=str, default='Adam', help='optimizer for training')
     parser.add_argument('--log_dir', type=str, default=None, help='experiment root')
     parser.add_argument('--decay_rate', type=float, default=1e-4, help='decay rate')
-    parser.add_argument('--use_normals', action='store_true', default=False, help='use normals')
+    parser.add_argument('--use_normals', action='store_true', default=True, help='use normals')
     parser.add_argument('--process_data', action='store_true', default=False, help='save data offline')
     parser.add_argument('--use_uniform_sample', action='store_true', default=False, help='use uniform sampiling')
     return parser.parse_args()
@@ -149,11 +149,11 @@ def main(args):
     else:
         optimizer = torch.optim.SGD(classifier.parameters(), lr=0.01, momentum=0.9)
 
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.7)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.7, verbose=True)
     global_epoch = 0
     global_step = 0
-    best_instance_acc = 0.0
-    best_class_acc = 0.0
+    best_loss = 100
+    best_epoch = 0
 
     '''TRANING'''
     logger.info('Start training...')
@@ -196,17 +196,17 @@ def main(args):
         # log_string('Train Instance Accuracy: %f' % train_instance_acc)
         log_string(f'Train loss epoch {epoch}: {total_loss / len(trainDataLoader)}.')
 
+
         with torch.no_grad():
             loss = test(classifier.eval(), testDataLoader, num_class=num_class)
-            best_loss = 0
-            if (loss >= best_loss):
+            if (loss <= best_loss):
                 best_loss = loss
-                best_epoch = epoch + 1
+                best_epoch = epoch
 
             log_string('Test loss: %f' % loss)
             log_string('Best loss: %f' % best_loss)
 
-            if loss >= best_loss:
+            if loss <= best_loss:
                 logger.info('Save model...')
                 savepath = str(checkpoints_dir) + '/best_model.pth'
                 log_string('Saving at %s' % savepath)
