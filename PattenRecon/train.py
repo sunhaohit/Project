@@ -182,11 +182,6 @@ def main(args):
             pred, trans_feat = classifier(points)
             loss = criterion(pred, target)
 
-            # pred_choice = pred.data.max(1)[1]
-            #
-            # correct = pred_choice.eq(target.long().data).cpu().sum()
-            # mean_correct.append(correct.item() / float(points.size()[0]))
-
             total_loss += loss
             loss.backward()
             optimizer.step()
