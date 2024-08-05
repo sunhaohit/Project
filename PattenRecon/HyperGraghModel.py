@@ -1,7 +1,6 @@
 import torch.nn as nn
 import torch.utils.data
 import torch.nn.functional as F
-from pointnet_utils import PointNetEncoder, feature_transform_reguliarzer
 
 
 class get_model(nn.Module):
@@ -46,7 +45,3 @@ class get_loss(torch.nn.Module):
         # print(f'Shape:{pred.shape},{target.shape}')
         loss = F.mse_loss(pred, target)
         return loss
-
-        # mat_diff_loss = feature_transform_reguliarzer(trans_feat)
-        # total_loss = loss + mat_diff_loss * self.mat_diff_loss_scale
-        # return total_loss

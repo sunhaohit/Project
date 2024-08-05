@@ -69,6 +69,9 @@ class MyDataset(Dataset):
         pc, ve = torch.stack(ls_pc, dim=0), torch.stack(ls_ve, dim=0)
 
         # print(pc)
+        indices = torch.randperm(len(pc))
+        pc, ve = pc[indices], ve[indices]
+        # print(ls_pc_fn[:5], ls_ve_fn[:5])
 
         self.pc_train, self.pc_test = pc[:split_num], pc[split_num:]
         self.ve_train, self.ve_test = ve[:split_num], ve[split_num:]
