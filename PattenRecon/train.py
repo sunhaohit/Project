@@ -191,10 +191,9 @@ def main(args):
         # log_string('Train Instance Accuracy: %f' % train_instance_acc)
         log_string(f'Train loss epoch {epoch}: {total_loss / len(trainDataLoader)}.')
 
-
         with torch.no_grad():
             loss = test(classifier.eval(), testDataLoader, num_class=num_class)
-            if (loss <= best_loss):
+            if loss <= best_loss:
                 best_loss = loss
                 best_epoch = epoch
 
